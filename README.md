@@ -2,7 +2,7 @@
 
 ![Swift](https://img.shields.io/badge/Swift-5.3%2B-orange.svg)
 ![Platform](https://img.shields.io/badge/Platform-iOS%2011.0%2B-lightgrey.svg)
-![Version](https://img.shields.io/badge/Version-1.1.0-blue.svg)
+![Version](https://img.shields.io/badge/Version-2.0.0-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![SPM](https://img.shields.io/badge/SPM-supported-brightgreen.svg)
 ![CocoaPods](https://img.shields.io/badge/CocoaPods-supported-blueviolet.svg)
@@ -63,7 +63,7 @@ Or add it to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/iLiuChang/Popover.git", from: "1.1.0")
+    .package(url: "https://github.com/iLiuChang/Popover.git", from: "2.0.0")
 ]
 ```
 
