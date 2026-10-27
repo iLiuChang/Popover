@@ -58,7 +58,7 @@
 		280506792D2D3D1900B579CA /* Demo */ = {
 			isa = PBXGroup;
 			children = (
-				2805068E2D2D3D5300B579CA /* Source */,
+				2805068E2D2D3D5300B579CA /* Sources */,
 				2805067A2D2D3D1900B579CA /* AppDelegate.swift */,
 				2805067C2D2D3D1900B579CA /* SceneDelegate.swift */,
 				2805067E2D2D3D1900B579CA /* ViewController.swift */,
@@ -70,13 +70,13 @@
 			path = Demo;
 			sourceTree = "<group>";
 		};
-		2805068E2D2D3D5300B579CA /* Source */ = {
+		2805068E2D2D3D5300B579CA /* Sources */ = {
 			isa = PBXGroup;
 			children = (
 				2805068F2D2D3D5300B579CA /* Popover.swift */,
 			);
-			name = Source;
-			path = ../../Source;
+			name = Sources;
+			path = ../../Sources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -38,5 +38,5 @@ pod 'SwiftPopover'
 
 ### Manual
 
-1. Download everything in the `Source` folder;
-2. Add (drag and drop) the source files in `Source` to your project.
+1. Download everything in the `Sources` folder;
+2. Add (drag and drop) the source files in `Sources` to your project.

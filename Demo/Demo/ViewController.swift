@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     
     @IBAction func selectLeft(_ sender: UIButton) {
         
-        let tableView = UITableView(frame: CGRect(x: 0, y: 0, width: 200, height: 135))
+        let tableView = UITableView(frame: CGRect(x: 0, y: 0, width: 200, height: 120))
         tableView.delegate = self
         tableView.dataSource = self
         tableView.isScrollEnabled = false
@@ -42,7 +42,7 @@ class ViewController: UIViewController {
     
     @IBAction func selectCenter(_ sender: UIButton) {
         
-        let tableView = UITableView(frame: CGRect(x: 0, y: 0, width: 100, height: 135))
+        let tableView = UITableView(frame: CGRect(x: 0, y: 0, width: 100, height: 120))
         tableView.delegate = self
         tableView.dataSource = self
         tableView.isScrollEnabled = false
@@ -72,6 +72,10 @@ extension ViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.popover.dismiss()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        40
     }
 }
 extension ViewController: UITableViewDataSource {
