@@ -46,16 +46,16 @@ open class Popover: UIView {
     open var arrowSize: CGSize = CGSize(width: 16.0, height: 10.0)
 
     /// Duration of the show animation, in seconds.
-    open var animationIn: TimeInterval = 0.6
+    open var showDuration: TimeInterval = 0.6
 
     /// Duration of the dismiss animation, in seconds.
-    open var animationOut: TimeInterval = 0.3
+    open var dismissDuration: TimeInterval = 0.3
 
     /// Corner radius of the bubble and of the content view.
     open var cornerRadius: CGFloat = 6.0
 
-    /// Minimum distance kept between the popover and the edges of the container view, when there is room for it.
-    open var sideEdge: CGFloat = 20.0
+    /// Minimum distance between the bubble and the edges of the container, when the bubble fits.
+    open var edgeMargin: CGFloat = 20
 
     /// The side of the anchor on which the popover appears.
     ///
@@ -76,7 +76,7 @@ open class Popover: UIView {
     open var initialSpringVelocity: CGFloat = 3
 
     /// Gap between the anchor view and the tip of the arrow. Only used by `show(from:in:)`.
-    open var sideOffset: CGFloat = 6.0
+    open var arrowSpacing: CGFloat = 6
 
     /// The object that receives show and dismiss callbacks.
     open weak var delegate: PopoverDelegate?
@@ -138,7 +138,7 @@ open class Popover: UIView {
     ///   - inView: The container the popover is added to, usually the view controller's view.
     open func show(from fromView: UIView, in inView: UIView) {
         let rect = inView.convert(fromView.bounds, from: fromView)
-        self.present(anchorRect: rect, offset: self.sideOffset, sourceView: fromView, in: inView)
+        self.present(anchorRect: rect, offset: self.arrowSpacing, sourceView: fromView, in: inView)
     }
 
     /// Shows the popover with the tip of its arrow at `point`.
@@ -168,7 +168,7 @@ open class Popover: UIView {
         self.isDismissing = true
         self.delegate?.willDismissPopover(self)
         let id = self.presentationID
-        UIView.animate(withDuration: self.animationOut, delay: 0,
+        UIView.animate(withDuration: self.dismissDuration, delay: 0,
                        options: .beginFromCurrentState,
                        animations: {
             self.transform = CGAffineTransform(scaleX: 0.0001, y: 0.0001)
@@ -227,7 +227,7 @@ private extension Popover {
         self.delegate?.willShowPopover(self)
         let id = self.presentationID
         UIView.animate(
-            withDuration: self.animationIn,
+            withDuration: self.showDuration,
             delay: 0,
             usingSpringWithDamping: self.springDamping,
             initialSpringVelocity: self.initialSpringVelocity,
@@ -242,7 +242,7 @@ private extension Popover {
             }
         if self.showOverlay {
             UIView.animate(
-                withDuration: self.animationIn / 3,
+                withDuration: self.showDuration / 3,
                 delay: 0,
                 options: .curveLinear,
                 animations: {
@@ -388,23 +388,23 @@ private extension Popover {
         guard length < available else {
             return lower + (available - length) * 0.5
         }
-        let margin = min(self.sideEdge, (available - length) * 0.5)
+        let margin = min(self.edgeMargin, (available - length) * 0.5)
         return min(max(value, lower + margin), upper - length - margin)
     }
 
     func updateContentConstraints() {
         NSLayoutConstraint.deactivate(self.contentConstraints)
-        let arrowLength = self.arrowSize.height
+        let extent = self.arrowSize.height
         var insets = UIEdgeInsets.zero
         switch self.currentDirection {
         case .up:
-            insets.bottom = arrowLength
+            insets.bottom = extent
         case .down:
-            insets.top = arrowLength
+            insets.top = extent
         case .left:
-            insets.right = arrowLength
+            insets.right = extent
         case .right:
-            insets.left = arrowLength
+            insets.left = extent
         }
         self.contentConstraints = [
             self.contentView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: insets.left),
@@ -417,19 +417,19 @@ private extension Popover {
 
     func bubblePath() -> UIBezierPath {
         let direction = self.currentDirection
-        let arrowLength = self.arrowSize.height
+        let extent = self.arrowSize.height
         var body = self.bounds
         switch direction {
         case .up:
-            body.size.height -= arrowLength
+            body.size.height -= extent
         case .down:
-            body.origin.y += arrowLength
-            body.size.height -= arrowLength
+            body.origin.y += extent
+            body.size.height -= extent
         case .left:
-            body.size.width -= arrowLength
+            body.size.width -= extent
         case .right:
-            body.origin.x += arrowLength
-            body.size.width -= arrowLength
+            body.origin.x += extent
+            body.size.width -= extent
         }
 
         let path = UIBezierPath()
@@ -443,7 +443,7 @@ private extension Popover {
         let edgeStart = isHorizontalEdge ? body.minX : body.minY
         let edgeEnd = isHorizontalEdge ? body.maxX : body.maxY
         let halfBase = min(self.arrowSize.width * 0.5, (edgeEnd - edgeStart) * 0.5 - radius)
-        let hasArrow = arrowLength > 0 && halfBase > 0
+        let hasArrow = extent > 0 && halfBase > 0
         let tipAlongEdge = isHorizontalEdge ? self.arrowTip.x : self.arrowTip.y
         let baseCenter = min(max(tipAlongEdge, edgeStart + radius + halfBase), edgeEnd - radius - halfBase)
         let tip: CGPoint

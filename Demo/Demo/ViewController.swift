@@ -100,11 +100,11 @@ class ViewController: UIViewController {
     @objc private func showDown(_ sender: UIButton) {
         let popover = makeMenu(width: 140)
         popover.direction = .down
-        popover.sideOffset = 20
+        popover.arrowSpacing = 20
         present(popover, from: sender)
     }
 
-    /// Custom arrow size and corner radius, shown above a button that sits near the bottom edge.
+    /// Custom arrow and corner radius, shown above a button that sits near the bottom edge.
     @objc private func showUp(_ sender: UIButton) {
         let popover = makeMenu(width: 160)
         popover.direction = .up

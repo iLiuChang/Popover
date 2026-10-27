@@ -106,7 +106,7 @@ popover.show(from: sender, in: view)
 
 ```swift
 popover.direction = .up
-popover.sideOffset = 20
+popover.arrowSpacing = 20
 popover.show(from: sender, in: view)
 ```
 
@@ -117,7 +117,7 @@ popover.show(from: sender, in: view)
 | `.left` | To the left of the anchor, arrow on the right edge |
 | `.right` | To the right of the anchor, arrow on the left edge |
 
-`sideOffset` is the gap between the anchor view and the arrow tip. It applies only to `show(from:in:)`.
+`arrowSpacing` is the gap between the anchor view and the arrow tip. It applies only to `show(from:in:)`.
 
 ### Show at a Point
 
@@ -126,7 +126,7 @@ let point = view.convert(CGPoint(x: sender.bounds.midX, y: sender.bounds.minY), 
 popover.show(point: point, in: view)
 ```
 
-The arrow tip is placed on `point`. `sideOffset` is not applied, and the popover does not follow a view when the container resizes.
+The arrow tip is placed on `point`. `arrowSpacing` is not applied, and the popover does not follow a view when the container resizes.
 
 ### Appearance
 
@@ -134,14 +134,14 @@ The arrow tip is placed on `point`. `sideOffset` is not applied, and the popover
 popover.fillColor = .white
 popover.cornerRadius = 14
 popover.arrowSize = CGSize(width: 22, height: 12)
-popover.sideEdge = 20
-popover.animationIn = 0.6
-popover.animationOut = 0.3
+popover.edgeMargin = 20
+popover.showDuration = 0.6
+popover.dismissDuration = 0.3
 popover.springDamping = 0.7
 popover.initialSpringVelocity = 3
 ```
 
-`arrowSize.width` is the arrow's base and `arrowSize.height` is how far it sticks out. `arrowSize = .zero` draws no arrow. `sideEdge` is the minimum distance kept between the bubble and the container edges when the bubble fits.
+`arrowSize.width` is the arrow's base and `arrowSize.height` is how far it sticks out. `arrowSize = .zero` draws no arrow. `edgeMargin` is the minimum distance kept between the bubble and the container edges when the bubble fits.
 
 The bubble is drawn in the popover's bounds, so a shadow goes on its layer:
 
@@ -197,16 +197,16 @@ func didDismissPopover(_ popover: Popover) {}
 |---|---|
 | `init(contentView:)` | Hosts `contentView`. Its `frame.size` when `show` is called sets the bubble size, not counting the arrow. |
 | `arrowSize` | Arrow base (`width`) and length (`height`). Defaults to `(16, 10)`. `.zero` hides the arrow. |
-| `animationIn` | Show animation duration, in seconds. Defaults to `0.6`. |
-| `animationOut` | Dismiss animation duration, in seconds. Defaults to `0.3`. |
+| `showDuration` | Show animation duration, in seconds. Defaults to `0.6`. |
+| `dismissDuration` | Dismiss animation duration, in seconds. Defaults to `0.3`. |
 | `cornerRadius` | Corner radius of the bubble and the content view. Defaults to `6`. |
-| `sideEdge` | Minimum distance from the container edges when the bubble fits. Defaults to `20`. |
+| `edgeMargin` | Minimum distance from the container edges when the bubble fits. Defaults to `20`. |
 | `direction` | Side of the anchor the bubble appears on. `nil` chooses `.down` or `.up` on each layout. |
 | `fillColor` | Fill of the bubble, including the arrow. Defaults to white. |
 | `showOverlay` | Adds `overlayView` behind the popover while it is shown. Defaults to `true`. |
 | `springDamping` | Damping of the show animation, from 0 to 1. Defaults to `0.7`. |
 | `initialSpringVelocity` | Initial velocity of the show animation. Defaults to `3`. |
-| `sideOffset` | Gap between the anchor view and the arrow tip. Used by `show(from:in:)` only. Defaults to `6`. |
+| `arrowSpacing` | Gap between the anchor view and the arrow tip. Used by `show(from:in:)` only. Defaults to `6`. |
 | `delegate` | Receives show and dismiss callbacks. |
 | `overlayView` | Full-screen control behind the popover. Tapping it calls `dismiss()`. |
 | `show(from:in:)` | Shows the popover pointing at a view. Follows that view when `in` resizes. |
@@ -237,7 +237,7 @@ func didDismissPopover(_ popover: Popover) {}
 
 The bubble, including the arrow, is one `UIBezierPath` filled in `draw(_:)`. The content view is pinned inside that path with constraints, leaving `arrowSize.height` on the arrow's edge. The path is built clockwise around the bubble. The arrow base is shifted along the edge so it does not enter a rounded corner, while the tip still points at the anchor.
 
-When `direction` is `nil`, the popover uses `.down` if the content fits below the anchor, and otherwise the vertical side with more free space. `.left` and `.right` are used only when set explicitly. If the bubble fits inside the container, its origin is clamped so it stays at least `sideEdge` points away from the edges. A bubble larger than the container is centered on that axis.
+When `direction` is `nil`, the popover uses `.down` if the content fits below the anchor, and otherwise the vertical side with more free space. `.left` and `.right` are used only when set explicitly. If the bubble fits inside the container, its origin is clamped so it stays at least `edgeMargin` points away from the edges. A bubble larger than the container is centered on that axis.
 
 An invisible subview matches the container's bounds. When the container's size changes, a popover shown with `show(from:in:)` converts the anchor view again and lays itself out. Each presentation has an identifier, so a completion handler from an older show or dismiss animation cannot remove the popover that is on screen.
 
